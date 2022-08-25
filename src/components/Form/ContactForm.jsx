@@ -11,27 +11,28 @@ import {
     TextField,
     Typography
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
 import Slide from '@mui/material/Slide';
-import { useNavigate } from 'react-router-dom';
 
 function ContactForm() {
 
     const navigate = useNavigate();
 
     const generos = ['Masculino', 'Femenino', 'Otro'];
+    const frecuencia = ['Nunca fui a una', 'Casualmente', 'Frecuentemente', 'Muy Frecuentemente']
     const [checked, setChecked] = useState(false);
 
     const[delay, setDelay] = useState(false);
     const [mail, setMail] = useState('');
     const [nombre, setNombre] = useState('');
-    const [apellido, setApellido] = useState('');
     const [telefono, setTelefono] = useState('');
     const [provincia, setProvincia] = useState('');
     const [nacimiento, setNacimiento] = useState('');
     const [genero, setGenero] = useState('');
+    const [freq, setFreq] = useState('');
 
     const [mailError, setMailError] = useState(false);
     const [telefonoError, setTelefonoError] = useState(false);
@@ -56,7 +57,7 @@ function ContactForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!mail.length || !telefono.length || !nombre.length || !apellido.length || provincia.length){
+        if(!mail.length || !telefono.length || !nombre.length || provincia.length || freq.length){
             setEmptyError(true);
             return
         }
@@ -72,13 +73,13 @@ function ContactForm() {
 
     const grabacion = () => {
         const infoCliente = {
-            apellido,
             nombre, 
             mail,
             telefono,
             provincia,
             nacimiento,
-            genero
+            genero,
+            freq
         }
 
         const db = getFirestore();
@@ -135,7 +136,7 @@ function ContactForm() {
                 >
                     <Box>
                         <Typography component='h1' variant='h4' sx={{paddingTop:'30px', paddingBottom:'30px', background:'rgba(0, 0, 0, 0.38)'}}>
-                            Por favor, completá este formulario.
+                            Por favor completá este formulario.
                         </Typography>
                         <Typography>
                             Estos datos seran utilizados para el sorteo.
@@ -153,17 +154,7 @@ function ContactForm() {
                         gap:'10px'
                         }}>
                     <TextField
-                            label='Apellido:' 
-                            placeholder='Minimo 3 caracteres'
-                            variant='outlined'
-                            color='secondary'
-                            value={apellido}
-                            onChange={(e) => {setApellido(e.target.value)}}
-                            fullWidth
-                            required
-                        />
-                    <TextField
-                            label='Nombre:' 
+                            label='Nombre completo:' 
                             placeholder='Minimo 3 caracteres'
                             variant='outlined'
                             color='secondary'
@@ -232,11 +223,27 @@ function ContactForm() {
                             sx={{minWidth:{xs:'80vw', sm:'40vw'}}}
                             labelId="gender-label"
                             id="gender-select"
-                            name=''
+                            required
+                            color='secondary'
                             value={genero}
                             onChange={(e) => {setGenero(e.target.value)}}
                         >
                             {generos.map(g => (
+                                <MenuItem required value={g} key={g}>{g}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl required>
+                        <InputLabel id="freq-label">Con qué frecuencia asistis a fiestas de electronica?</InputLabel>
+                        <Select
+                            sx={{minWidth:{xs:'80vw', sm:'40vw'}}}
+                            labelId="freq-label"
+                            id="gender-select"
+                            color='secondary'
+                            value={freq}
+                            onChange={(e) => {setFreq(e.target.value)}}
+                        >
+                            {frecuencia.map(g => (
                                 <MenuItem required value={g} key={g}>{g}</MenuItem>
                             ))}
                         </Select>
@@ -247,6 +254,9 @@ function ContactForm() {
                             />} 
                         label="Acepto los Terminos y condiciones" 
                     />
+                    <Link to='/legal' style={{textDecoration: 'none', color:'whitesmoke', "&:hover": {color: "#FFCE41"}}}>
+                        Ver Condiciones
+                    </Link>
                     {condiError && <Typography variant='caption' color='error'>
                         Debes aceptar la politica de uso de datos.
                     </Typography>}

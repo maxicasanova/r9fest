@@ -7,6 +7,7 @@ import { Box } from '@mui/material';
 import Confirmation from './components/Form/Confirmation';
 import ContactForm from './components/Form/ContactForm';
 import CssBaseline from '@mui/material/CssBaseline';
+import Legal from './components/Form/Legal';
 import Mulato from './components/Form/Mulato';
 
 const darkTheme = createTheme({
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<ContactForm/>} />
           <Route exact path='/confirmation' element={<Confirmation/>} />
+          <Route exact path='/legal' element={<Legal/>} />
           <Route exact path='/mulato' element={<Mulato/>} />
         </Routes>
         </Box>

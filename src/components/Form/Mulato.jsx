@@ -6,14 +6,13 @@ import React from 'react';
 function Mulato() {
 
     const headers = [
-        { label: "Apellido", key: "apellido" },
         { label: "Nombre", key: "nombre" },
         { label: "Email", key: "mail" },
         { label: "Genero", key: "genero" },
         { label: "Nacimeinto", key: "nacimiento" },
         { label: "Provincia", key: "provincia" },
         { label: "Telefono", key: "telefono" },
-
+        { label: "Frecuencia", key: "freq" },
     ];
 
     const [ready, setReady] = React.useState(false);
