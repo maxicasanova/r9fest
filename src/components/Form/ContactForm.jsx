@@ -15,6 +15,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Slide from '@mui/material/Slide';
 
 function ContactForm() {
@@ -30,7 +33,7 @@ function ContactForm() {
     const [nombre, setNombre] = useState('');
     const [telefono, setTelefono] = useState('');
     const [provincia, setProvincia] = useState('');
-    const [nacimiento, setNacimiento] = useState('');
+    const [nacimiento, setNacimiento] = useState(new Date());
     const [genero, setGenero] = useState('');
     const [freq, setFreq] = useState('');
 
@@ -57,7 +60,7 @@ function ContactForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!mail.length || !telefono.length || !nombre.length || provincia.length || freq.length){
+        if(!mail.length || !telefono.length || !nombre.length || !provincia.length || !freq.length){
             setEmptyError(true);
             return
         }
@@ -205,18 +208,20 @@ function ContactForm() {
                             width:'100%'
                         }}
                         />
-                    <TextField
-                        label="Año de nacimiento:"
-                        placeholder='Ingrese aqui su año de nacimiento.'
-                        color='secondary'
-                        required
-                        type='number'
-                        value={nacimiento}
-                        onChange={(e) => {setNacimiento(e.target.value)}}
-                        sx={{
-                            width:'100%'
-                        }}
-                        />
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                            <DatePicker
+                            color='secondary'
+                            disableFuture
+                            label="Fecha de Nacimiento"
+                            openTo="year"
+                            views={['year', 'month', 'day']}
+                            value={nacimiento}
+                            onChange={(newValue) => {
+                                setNacimiento(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} color='secondary' sx={{minWidth:{xs:'80vw', sm:'40vw'}}}/>}
+                            />
+                        </LocalizationProvider>
                     <FormControl>
                         <InputLabel id="gender-label">Género:</InputLabel>
                         <Select
@@ -234,7 +239,7 @@ function ContactForm() {
                         </Select>
                     </FormControl>
                     <FormControl required>
-                        <InputLabel id="freq-label">Con qué frecuencia asistis a fiestas de electronica?</InputLabel>
+                        <InputLabel id="freq-label" sx={{fontSize:'14px'}}>Con qué frecuencia asistis a fiestas de electronica?</InputLabel>
                         <Select
                             sx={{minWidth:{xs:'80vw', sm:'40vw'}}}
                             labelId="freq-label"
