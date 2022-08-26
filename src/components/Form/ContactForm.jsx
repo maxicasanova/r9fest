@@ -20,7 +20,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Slide from '@mui/material/Slide';
 
-function ContactForm() {
+function ContactForm({setInit}) {
 
     const navigate = useNavigate();
 
@@ -68,6 +68,7 @@ function ContactForm() {
         if(checked && !mailError && !telefonoError && !emptyError){
             console.log('ok');
             grabacion();
+            setInit(true);
         } else if (!condiError){
             setCondiError(true)
         }
@@ -80,7 +81,7 @@ function ContactForm() {
             mail,
             telefono,
             provincia,
-            nacimiento,
+            nacimiento: nacimiento._d || 'no ingreso fecha',
             genero,
             freq
         }
@@ -239,7 +240,7 @@ function ContactForm() {
                         </Select>
                     </FormControl>
                     <FormControl required>
-                        <InputLabel id="freq-label" sx={{fontSize:'14px'}}>Con qué frecuencia asistis a fiestas de electronica?</InputLabel>
+                        <InputLabel id="freq-label" sx={{fontSize:'10px'}}>Con qué frecuencia asistis a fiestas de electronica?</InputLabel>
                         <Select
                             sx={{minWidth:{xs:'80vw', sm:'40vw'}}}
                             labelId="freq-label"
